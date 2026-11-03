@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchWeatherData } from "../api/weatherApi";
+import { HourlyChart } from "./HourlyChart";
 
 type WeatherRendererProps = {
 	latitude: number;
@@ -89,6 +90,11 @@ export function WeatherRenderer({ latitude, longitude }: WeatherRendererProps) {
 								);
 							})}
 					</div>
+					<HourlyChart 
+						time={data.hourly.time.slice(selectedDayIndex * 24, (selectedDayIndex + 1) * 24)} 
+						temperature={data.hourly.temperature.slice(selectedDayIndex * 24, (selectedDayIndex + 1) * 24)} 
+						precipitationProb={data.hourly.precipitationProb.slice(selectedDayIndex * 24, (selectedDayIndex + 1) * 24)} 
+					/>
 				</div>
 			)}
 		</div>
