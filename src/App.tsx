@@ -8,7 +8,7 @@ function App() {
   const [longitude, setLongitude] = useState(19.9489)
 
   return (
-    <div>
+    <div className="min-h-screen bg-slate-900 text-white p-5">
 
       <CoordinatesForm onSubmit={(lat, lon) => { setLatitude(lat); setLongitude(lon); }}/>
 

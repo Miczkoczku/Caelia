@@ -32,32 +32,52 @@ export function CoordinatesForm({ onSubmit }: CoordinatesFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="latitude">Szerokość</label>
+  <form
+    onSubmit={handleSubmit}
+    className="flex flex-col gap-4 rounded-xl border border-white/20 bg-white/10 p-5"
+  >
+    <h2 className="text-xl font-semibold">
+      Sprawdź pogodę
+    </h2>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="flex flex-col gap-2">
+        <label htmlFor="latitude" className="text-sm font-medium">
+          Szerokość
+        </label>
         <input
           id="latitude"
           type="number"
           step="any"
           value={latitude}
           onChange={(event) => setLatitude(event.target.value)}
+          className="w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 outline-none focus:border-blue-400"
           required
         />
       </div>
 
-      <div>
-        <label htmlFor="longitude">Długość</label>
+      <div className="flex flex-col gap-2">
+        <label htmlFor="longitude" className="text-sm font-medium">
+          Długość
+        </label>
         <input
           id="longitude"
           type="number"
           step="any"
           value={longitude}
           onChange={(event) => setLongitude(event.target.value)}
+          className="w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 outline-none focus:border-blue-400"
           required
         />
       </div>
+    </div>
 
-      <button type="submit">Sprawdź pogodę</button>
-    </form>
-  );
+    <button
+      type="submit"
+      className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white cursor-pointer hover:bg-blue-500 transition-colors"
+    >
+      Sprawdź pogodę
+    </button>
+  </form>
+);
 }

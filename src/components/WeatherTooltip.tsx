@@ -1,6 +1,6 @@
 type WeatherTooltipProps = {
     active?: boolean;
-    payload?: any[];
+    payload?: { payload: { temperature: number; precipitationProb: number } }[];
     label?: string | number;
 };
     
