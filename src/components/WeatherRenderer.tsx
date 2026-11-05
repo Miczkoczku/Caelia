@@ -27,31 +27,43 @@ export function WeatherRenderer({ latitude, longitude }: WeatherRendererProps) {
 			<h1 className="text-2xl font-bold">{latitude}, {longitude}</h1>
 			<h2 className="text-xl">Teraz: {Math.round(data.current.temperature)}°C</h2>
 			
-			<hr />
-
-			<h3 className="text-lg font-semibold">Prognoza na najbliższe dni:</h3>
 			
-			<DailyForecast
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+
+			<section className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-xl">
+				<h3 className="mb-3 text-lg font-semibold">
+				Prognoza na 7 dni
+				</h3>
+
+				<DailyForecast
 				days={data.daily.time}
 				maxTemp={data.daily.maxTemp}
 				minTemp={data.daily.minTemp}
 				selectedDayIndex={selectedDayIndex}
 				onSelectDay={setSelectedDayIndex}
-			/>
+				/>
+			</section>
 
-			{selectedDayIndex !== null && (
-				<div className="mt-5">
-					<h4 className="text-lg font-semibold">
-						Szczegóły godzinowe dla dnia:{" "}
-						{data.daily.time[selectedDayIndex].toLocaleDateString("pl-PL")}
-					</h4>
-					<HourlyChart 
-						time={data.hourly.time.slice(selectedDayIndex * 24, (selectedDayIndex + 1) * 24)} 
-						temperature={data.hourly.temperature.slice(selectedDayIndex * 24, (selectedDayIndex + 1) * 24)} 
-						precipitationProb={data.hourly.precipitationProb.slice(selectedDayIndex * 24, (selectedDayIndex + 1) * 24)} 
-					/>
-				</div>
-			)}
+			<section className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-xl md:col-span-2">
+				<h3 className="mb-3 text-lg font-semibold">
+				Prognoza godzinowa
+				</h3>
+
+				{selectedDayIndex !== null ? (
+				<HourlyChart
+					time={data.hourly.time.slice(selectedDayIndex * 24, (selectedDayIndex + 1) * 24)}
+					temperature={data.hourly.temperature.slice(selectedDayIndex * 24, (selectedDayIndex + 1) * 24)}
+					precipitationProb={data.hourly.precipitationProb.slice(selectedDayIndex * 24, (selectedDayIndex + 1) * 24)}
+				/>
+				) : (
+				<p className="text-slate-300">
+					Wybierz dzień, aby zobaczyć prognozę godzinową.
+				</p>
+				)}
+			</section>
+
+			</div>
+
 		</div>
 	);
 }
