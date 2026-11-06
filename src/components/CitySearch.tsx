@@ -5,24 +5,26 @@ import { Search, X, MapPin } from "lucide-react";
 import { searchCities, type City } from "../api/geocodingApi";
 
 type CitySearchProps = {
-    onSelect: (city: City) => void;
+  onSelect: (city: City) => void;
+  expandDirection?: "center" | "left";
 };
 
-export function CitySearch({ onSelect }: CitySearchProps) {
+export function CitySearch({
+  onSelect,
+  expandDirection = "center",
+}: CitySearchProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // przenosi kursor do inputa po otwarciu wyszukiwarki
   useEffect(() => {
     if (isOpen) {
       inputRef.current?.focus();
     }
   }, [isOpen]);
 
-  // Czekamy 300 ms od ostatniej wpisanej litery
   useEffect(() => {
     const timeout = setTimeout(() => {
       setDebouncedQuery(query.trim());
@@ -31,7 +33,6 @@ export function CitySearch({ onSelect }: CitySearchProps) {
     return () => clearTimeout(timeout);
   }, [query]);
 
-  // pobiera miasta
   const {
     data: results = [],
     isFetching: loading,
@@ -43,31 +44,45 @@ export function CitySearch({ onSelect }: CitySearchProps) {
     staleTime: 5 * 60 * 1000,
   });
 
-
   const isSearching =
     query.trim() !== debouncedQuery || loading;
 
-  // wybiera miasta
-    function selectCity(city: City) {
-        onSelect(city);
-        closeSearch();
-    }
-
-  // zamkniecie wyszukiwarki
   function closeSearch() {
     setIsOpen(false);
     setQuery("");
     setDebouncedQuery("");
   }
 
-  return (
-    <div className="relative z-50 mx-auto w-full max-w-md">
+  function selectCity(city: City) {
+    onSelect(city);
+    closeSearch();
+  }
 
+  // Zamknij wyszukiwarkę przy przejściu między trybami.
+  const previousDirection = useRef(expandDirection);
+
+  useEffect(() => {
+    if (previousDirection.current !== expandDirection) {
+      previousDirection.current = expandDirection;
+      // Zmiana trybu nagłówka resetuje wyszukiwanie.
+      setIsOpen(false);
+      setQuery("");
+      setDebouncedQuery("");
+    }
+  }, [expandDirection]);
+
+  const positionClass =
+    expandDirection === "center"
+      ? "left-1/2 -translate-x-1/2"
+      : "right-0";
+
+  return (
+    <div className="relative z-50 h-12 w-12">
       {/* Pasek wyszukiwania */}
       <div
-        className={`relative z-20 mx-auto flex h-12 items-center overflow-hidden rounded-full border border-white/20 bg-slate-800/95 backdrop-blur-xl transition-[width] duration-300 ease-in-out ${
-          isOpen ? "w-full" : "w-12"
-        }`}
+        className={`absolute top-0 z-20 flex h-12 items-center overflow-hidden rounded-full border border-white/20 bg-slate-800/95 backdrop-blur-xl transition-[width] duration-300 ease-in-out ${
+          isOpen ? "w-[400px]" : "w-12"
+        } ${positionClass}`}
         style={{
           boxShadow: "0 6px 18px rgba(0, 0, 0, 0.28)",
         }}
@@ -106,7 +121,7 @@ export function CitySearch({ onSelect }: CitySearchProps) {
       {/* Panel podpowiedzi */}
       {isOpen && query.trim().length >= 2 && (
         <div
-          className="absolute top-6 left-0 z-10 w-full overflow-hidden rounded-b-3xl border border-white/10 bg-slate-800/95 px-2 pb-2 pt-9 backdrop-blur-xl"
+          className={`absolute top-6 z-10 w-[400px] overflow-hidden rounded-b-3xl border border-white/10 bg-slate-800/95 px-2 pb-2 pt-9 backdrop-blur-xl ${positionClass}`}
           style={{
             boxShadow: "0 16px 32px rgba(0, 0, 0, 0.16)",
           }}
