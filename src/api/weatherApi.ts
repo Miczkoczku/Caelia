@@ -52,6 +52,7 @@ export async function fetchWeatherData(lat: number, lng: number) {
       windDirection: current.variables(3)!.value(),
     },
     daily: {
+      weatherCode: daily.variables(0)!.valuesArray()!,
       time: Array.from(
         { length: (Number(daily.timeEnd()) - Number(daily.time())) / daily.interval() },
         (_, i) => new Date((Number(daily.time()) + i * daily.interval() + utcOffsetSeconds) * 1000)
