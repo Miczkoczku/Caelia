@@ -5,6 +5,7 @@ import { HourlyChart } from "./HourlyChart";
 import { DailyForecast } from "./DailyForecast";
 import { MapPin } from "lucide-react";
 import { SunCycle } from "./SunCycle";
+import { WindCompass } from "./WindCompass";
 
 type WeatherRendererProps = {
 	latitude: number;
@@ -92,12 +93,17 @@ export function WeatherRenderer({ latitude, longitude, locationName }: WeatherRe
 			
 			
 			<SunCycle
-			key={`${latitude}-${longitude}`}
-			sunrise={data.daily.sunrise[0]}
-			sunset={data.daily.sunset[0]}
-			nextSunrise={data.daily.sunrise[1]}
-			currentTime={new Date()}
-			timezone={data.timezone}
+				key={`${latitude}-${longitude}`}
+				sunrise={data.daily.sunrise[0]}
+				sunset={data.daily.sunset[0]}
+				nextSunrise={data.daily.sunrise[1]}
+				currentTime={new Date()}
+				timezone={data.timezone}
+			/>
+			
+			<WindCompass
+				speed={data.current.windSpeed}
+				direction={data.current.windDirection}
 			/>
 
 
