@@ -3,13 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchWeatherData } from "../api/weatherApi";
 import { HourlyChart } from "./HourlyChart";
 import { DailyForecast } from "./DailyForecast";
+import { MapPin } from "lucide-react";
 
 type WeatherRendererProps = {
 	latitude: number;
 	longitude: number;
+	locationName: string;
 };
 
-export function WeatherRenderer({ latitude, longitude }: WeatherRendererProps) {
+export function WeatherRenderer({ latitude, longitude, locationName }: WeatherRendererProps) {
 	// ktory dzien jest wybrany
 	const [selectedDayIndex, setSelectedDayIndex] = useState<number>(0);
 
@@ -24,9 +26,28 @@ export function WeatherRenderer({ latitude, longitude }: WeatherRendererProps) {
 
 	return (
 		<div>
-			<h2 className="text-xl">Teraz: {Math.round(data.current.temperature)}°C</h2>
 			
 			
+		<div className="flex flex-col items-center gap-3 py-8 text-center">
+
+		{/* Lokalizacja */}
+		<div className="flex items-center gap-3 text-white/80">
+			<MapPin className="h-6 w-6 text-blue-300" />
+
+			<h2 className="text-2xl font-medium tracking-wide md:text-3xl">
+			{locationName}
+			</h2>
+		</div>
+
+		{/* Duża temperatura */}
+		<div className="text-7xl font-light leading-none tracking-tighter md:text-9xl">
+			{Math.round(data.current.temperature)}°
+		</div>
+
+		</div>
+
+
+
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 
 			<section className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-xl">

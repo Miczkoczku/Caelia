@@ -5,7 +5,7 @@ import { Search, X, MapPin } from "lucide-react";
 import { searchCities, type City } from "../api/geocodingApi";
 
 type CitySearchProps = {
-  onSelect: (latitude: number, longitude: number) => void;
+    onSelect: (city: City) => void;
 };
 
 export function CitySearch({ onSelect }: CitySearchProps) {
@@ -15,7 +15,7 @@ export function CitySearch({ onSelect }: CitySearchProps) {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Automatyczne ustawianie kursora po otwarciu
+  // przenosi kursor do inputa po otwarciu wyszukiwarki
   useEffect(() => {
     if (isOpen) {
       inputRef.current?.focus();
@@ -31,7 +31,7 @@ export function CitySearch({ onSelect }: CitySearchProps) {
     return () => clearTimeout(timeout);
   }, [query]);
 
-  // Pobieranie miast przez TanStack Query
+  // pobiera miasta
   const {
     data: results = [],
     isFetching: loading,
@@ -43,17 +43,17 @@ export function CitySearch({ onSelect }: CitySearchProps) {
     staleTime: 5 * 60 * 1000,
   });
 
-  // Czy użytkownik czeka na nowe wyniki?
+
   const isSearching =
     query.trim() !== debouncedQuery || loading;
 
-  // Wybranie miasta
-  function selectCity(city: City) {
-    onSelect(city.latitude, city.longitude);
-    closeSearch();
-  }
+  // wybiera miasta
+    function selectCity(city: City) {
+        onSelect(city);
+        closeSearch();
+    }
 
-  // Zamykanie wyszukiwarki
+  // zamkniecie wyszukiwarki
   function closeSearch() {
     setIsOpen(false);
     setQuery("");

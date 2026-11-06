@@ -1,41 +1,45 @@
+
 import { useState } from "react";
 import { WeatherRenderer } from "./components/WeatherRenderer";
 import { CitySearch } from "./components/CitySearch";
+import type { City } from "./api/geocodingApi";
 
 function App() {
+  const [latitude, setLatitude] = useState(49.299);
+  const [longitude, setLongitude] = useState(19.9489);
+  const [selectedCity, setSelectedCity] = useState<City | null>(null);
 
-  const [latitude, setLatitude] = useState(49.299)
-  const [longitude, setLongitude] = useState(19.9489)
-
-
-return (
-  <>
-    <div className="min-h-screen bg-slate-900 text-white p-4 md:p-8">
+  return (
+    <div className="min-h-screen bg-slate-900 p-4 text-white md:p-8">
       <div className="mx-auto max-w-6xl space-y-6">
 
-        <header className="relative flex min-h-12 items-center justify-center">
-        <h1 className="absolute left-0 text-3xl font-bold">
-            Caelia
-        </h1>
-
+        
+        <header className="flex min-h-12 items-center justify-center">
         <CitySearch
-            onSelect={(lat, lon) => {
-            setLatitude(lat);
-            setLongitude(lon);
+            onSelect={(city) => {
+            setSelectedCity(city);
+            setLatitude(city.latitude);
+            setLongitude(city.longitude);
             }}
         />
         </header>
+
 
         <main className="space-y-6">
           <WeatherRenderer
             latitude={latitude}
             longitude={longitude}
+            locationName={
+              selectedCity
+                ? `${selectedCity.name}, ${selectedCity.country ?? ""}`
+                : "Zakopane, Polska"
+            }
           />
         </main>
 
       </div>
     </div>
-  </>
-);}
+  );
+}
 
-export default App
+export default App;
