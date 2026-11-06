@@ -4,7 +4,7 @@ export async function fetchWeatherData(lat: number, lng: number) {
   const params = {
     latitude: lat,
     longitude: lng,
-    current: ["temperature_2m", "weather_code", "wind_speed_10m", "wind_direction_10m"],
+    current: ["temperature_2m", "weather_code", "wind_speed_10m", "wind_direction_10m", "relative_humidity_2m"],
     daily: ["weather_code", "temperature_2m_max", "temperature_2m_min", "sunrise", "sunset"],
     hourly: ["temperature_2m", "weather_code", "precipitation_probability"],
     timezone: "auto",
@@ -50,6 +50,7 @@ export async function fetchWeatherData(lat: number, lng: number) {
       weatherCode: current.variables(1)!.value(),
       windSpeed: current.variables(2)!.value(),
       windDirection: current.variables(3)!.value(),
+      humidity: current.variables(4)!.value(),
     },
     daily: {
       weatherCode: daily.variables(0)!.valuesArray()!,

@@ -6,6 +6,7 @@ import { DailyForecast } from "./DailyForecast";
 import { SunCycle } from "./SunCycle";
 import { WindCompass } from "./WindCompass";
 import { WeatherHead } from "./WeatherHead";
+import { HumidityWidget } from "./HumidityWidget";
 
 type WeatherRendererProps = {
 	latitude: number;
@@ -91,6 +92,8 @@ export function WeatherRenderer({ latitude, longitude, locationName }: WeatherRe
 					speed={data.current.windSpeed}
 					direction={data.current.windDirection}
 				/>
+
+				<HumidityWidget humidity={data.current.humidity} />
 			</div>
 		</div>
 	);
