@@ -11,7 +11,7 @@ type WeatherRendererProps = {
 
 export function WeatherRenderer({ latitude, longitude }: WeatherRendererProps) {
 	// ktory dzien jest wybrany
-	const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null);
+	const [selectedDayIndex, setSelectedDayIndex] = useState<number>(0);
 
 	// pobiera dane, w ktoryms pliku sa domyslnie ustawione na zakopane
 	const { data, isLoading, isError } = useQuery({
@@ -24,7 +24,6 @@ export function WeatherRenderer({ latitude, longitude }: WeatherRendererProps) {
 
 	return (
 		<div>
-			<h1 className="text-2xl font-bold">{latitude}, {longitude}</h1>
 			<h2 className="text-xl">Teraz: {Math.round(data.current.temperature)}°C</h2>
 			
 			
@@ -44,22 +43,29 @@ export function WeatherRenderer({ latitude, longitude }: WeatherRendererProps) {
 				/>
 			</section>
 
-			<section className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-xl md:col-span-2">
+			<section className="flex min-h-[420px] flex-col rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-xl md:col-span-2">
 				<h3 className="mb-3 text-lg font-semibold">
 				Prognoza godzinowa
 				</h3>
 
-				{selectedDayIndex !== null ? (
+				
+				<div className="min-h-0 flex-1">
 				<HourlyChart
-					time={data.hourly.time.slice(selectedDayIndex * 24, (selectedDayIndex + 1) * 24)}
-					temperature={data.hourly.temperature.slice(selectedDayIndex * 24, (selectedDayIndex + 1) * 24)}
-					precipitationProb={data.hourly.precipitationProb.slice(selectedDayIndex * 24, (selectedDayIndex + 1) * 24)}
+					time={data.hourly.time.slice(
+					selectedDayIndex * 24,
+					(selectedDayIndex + 1) * 24
+					)}
+					temperature={data.hourly.temperature.slice(
+					selectedDayIndex * 24,
+					(selectedDayIndex + 1) * 24
+					)}
+					precipitationProb={data.hourly.precipitationProb.slice(
+					selectedDayIndex * 24,
+					(selectedDayIndex + 1) * 24
+					)}
 				/>
-				) : (
-				<p className="text-slate-300">
-					Wybierz dzień, aby zobaczyć prognozę godzinową.
-				</p>
-				)}
+				</div>
+
 			</section>
 
 			</div>

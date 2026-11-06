@@ -2,7 +2,7 @@ type DailyForecastProps = {
     days: Date[];
     maxTemp: Float32Array;
     minTemp: Float32Array;
-    selectedDayIndex: number | null;
+    selectedDayIndex: number;
     onSelectDay: (index: number) => void;
 };
 
