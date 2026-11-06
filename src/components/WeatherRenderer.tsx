@@ -4,6 +4,7 @@ import { fetchWeatherData } from "../api/weatherApi";
 import { HourlyChart } from "./HourlyChart";
 import { DailyForecast } from "./DailyForecast";
 import { MapPin } from "lucide-react";
+import { SunCycle } from "./SunCycle";
 
 type WeatherRendererProps = {
 	latitude: number;
@@ -88,6 +89,18 @@ export function WeatherRenderer({ latitude, longitude, locationName }: WeatherRe
 				</div>
 
 			</section>
+			
+			
+			<SunCycle
+			key={`${latitude}-${longitude}`}
+			sunrise={data.daily.sunrise[0]}
+			sunset={data.daily.sunset[0]}
+			nextSunrise={data.daily.sunrise[1]}
+			currentTime={new Date()}
+			timezone={data.timezone}
+			/>
+
+
 
 			</div>
 

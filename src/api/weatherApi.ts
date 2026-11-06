@@ -5,7 +5,7 @@ export async function fetchWeatherData(lat: number, lng: number) {
     latitude: lat,
     longitude: lng,
     current: ["temperature_2m", "weather_code", "wind_speed_10m"],
-    daily: ["weather_code", "temperature_2m_max", "temperature_2m_min"],
+    daily: ["weather_code", "temperature_2m_max", "temperature_2m_min", "sunrise", "sunset"],
     hourly: ["temperature_2m", "weather_code", "precipitation_probability"],
     timezone: "auto",
   };
@@ -19,7 +19,31 @@ export async function fetchWeatherData(lat: number, lng: number) {
   const hourly = response.hourly()!;
   const daily = response.daily()!;
 
+
+  const dailyCount =
+    (Number(daily.timeEnd()) - Number(daily.time())) /
+    daily.interval();
+
+  const sunrise = Array.from(
+    { length: dailyCount },
+    (_, i) => {
+      const timestamp = daily.variables(3)!.valuesInt64(i);
+      return new Date(Number(timestamp) * 1000);
+    }
+  );
+
+  const sunset = Array.from(
+    { length: dailyCount },
+    (_, i) => {
+      const timestamp = daily.variables(4)!.valuesInt64(i);
+      return new Date(Number(timestamp) * 1000);
+    }
+  );
+
+
+
   return {
+    timezone: response.timezone() ?? "UTC",
     current: {
       time: new Date((Number(current.time()) + utcOffsetSeconds) * 1000),
       temperature: current.variables(0)!.value(),
@@ -33,6 +57,8 @@ export async function fetchWeatherData(lat: number, lng: number) {
       ),
       maxTemp: daily.variables(1)!.valuesArray()!,
       minTemp: daily.variables(2)!.valuesArray()!,
+      sunrise,
+      sunset,
     },
     hourly: {
       time: Array.from(
